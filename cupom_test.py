@@ -2,7 +2,7 @@
 
 import cupom
 import pytest
-
+import unittest
 
 def verifica_campo_obrigatorio_objeto(mensagem_esperada, loja):
     with pytest.raises(Exception) as excinfo:
@@ -10,8 +10,7 @@ def verifica_campo_obrigatorio_objeto(mensagem_esperada, loja):
     the_exception = excinfo.value
     assert mensagem_esperada == str(the_exception)
 
-
-# Todas as variaveis preenchidas
+# Dados Loja
 NOME_LOJA = "Loja 1"
 LOGRADOURO = "Log 1"
 NUMERO = 10
@@ -305,8 +304,9 @@ def test_valida_inscricao_estadual():
     verifica_campo_obrigatorio_objeto(
         "O campo inscrição estadual da loja é obrigatório", LOJA_IE_VAZIA)
 
-ENDERECO_SEM_NUMERO_SEM_COMPLEMENTO = cupom.Endereco(LOGRADOURO, 0, None, BAIRRO,
-                                   MUNICIPIO, ESTADO, CEP)
+ENDERECO_SEM_NUMERO_SEM_COMPLEMENTO = cupom.Endereco(LOGRADOURO, 0, None,
+                                                    BAIRRO, MUNICIPIO, ESTADO,
+                                                    CEP)
 
 LOJA_SEM_NUMERO_SEM_COMPLEMENTO = cupom.Loja(NOME_LOJA, ENDERECO_SEM_NUMERO_SEM_COMPLEMENTO,
                                              TELEFONE, OBSERVACAO, CNPJ,
@@ -324,9 +324,10 @@ IE: 123456789'''
 def test_valida_numero_e_complemento():
     assert LOJA_SEM_NUMERO_SEM_COMPLEMENTO.dados_loja() == TEXTO_ESPERADO_SEM_NUMERO_SEM_COMPLEMENTO
 
+ENDERECO_SEM_NUMERO_SEM_COMPLEMENTO_SEM_BAIRRO = cupom.Endereco(LOGRADOURO, 0, None,
+                                                    None, MUNICIPIO, ESTADO,
+                                                    CEP)
 
-ENDERECO_SEM_NUMERO_SEM_COMPLEMENTO_SEM_BAIRRO = cupom.Endereco(LOGRADOURO, 0, None, None,
-                                   MUNICIPIO, ESTADO, CEP)
 LOJA_SEM_NUMERO_SEM_COMPLEMENTO_SEM_BAIRRO = cupom.Loja(NOME_LOJA, 
                                                         ENDERECO_SEM_NUMERO_SEM_COMPLEMENTO_SEM_BAIRRO, 
                                                         TELEFONE, OBSERVACAO,
@@ -345,22 +346,29 @@ IE: 123456789'''
 def test_valida_numero_complemento_e_bairro():
     assert LOJA_SEM_NUMERO_SEM_COMPLEMENTO_SEM_BAIRRO.dados_loja() == TEXTO_ESPERADO_SEM_NUMERO_SEM_COMPLEMENTO_SEM_BAIRRO
 
+TEXTO_ESPERADO_TEST_EXERCICIO2_CUSTOMIZADO = '''Loja CRVG
+R. Gen. Almério de Moura, 131 Estádio
+São Januário - Rio de Janeiro - RJ
+CEP:20921-060 Tel (21) 91898-1927
+Obs 1
+CNPJ: 12.111.333/12133-12
+IE: 123.456.789.000'''
 
 def test_exercicio2_customizado():
 
     # Defina seus próprios valores para as variáveis a seguir
-    nome_loja = ""
-    logradouro = ""
-    numero = 0
-    complemento = ""
-    bairro = ""
-    municipio = ""
-    estado = ""
-    cep = ""
-    telefone = ""
-    observacao = ""
-    cnpj = ""
-    inscricao_estadual = ""
+    nome_loja = "Loja CRVG"
+    logradouro = "R. Gen. Almério de Moura"
+    numero = 131
+    complemento = "Estádio"
+    bairro = "São Januário"
+    municipio = "Rio de Janeiro"
+    estado = "RJ"
+    cep = "20921-060"
+    telefone = "(21) 91898-1927"
+    observacao = "Obs 1"
+    cnpj = "12.111.333/12133-12"
+    inscricao_estadual = "123.456.789.000"
 
     endereco_customizado = cupom.Endereco(logradouro, numero, complemento,
                                  bairro, municipio, estado, cep)
@@ -368,5 +376,4 @@ def test_exercicio2_customizado():
                                  observacao, cnpj, inscricao_estadual)
 
     # E atualize o texto esperado abaixo
-    assert (loja_customizada.dados_loja() == """
-""")
+    assert (loja_customizada.dados_loja() == TEXTO_ESPERADO_TEST_EXERCICIO2_CUSTOMIZADO)
